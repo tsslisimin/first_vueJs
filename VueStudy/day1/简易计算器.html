@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<!--这里就是mvvm中的V-->
+    <body>
+        <div id="app1">
+            <input type="text" v-model="n1">
+
+            <select v-model="opt" @change="cal">
+                <option value="+">+</option>
+                <option value="-">-</option>
+                <option value="*">*</option>
+                <option value="/">/</option>
+            </select>
+            <input type="text" v-model="n2">
+            <input type="button" value="=" @click="cal">
+            <input type="text" v-model="result">
+        </div>
+    </body>
+
+    <script>
+        // new出来的app，就是MVVM中的vm
+        var app = new Vue({
+            el:"#app1",
+            //data就是MVVM中的M
+            data:{
+                n1:0,
+                n2:0,
+                result:0,
+                opt:'+',
+
+            },
+            methods:{
+                cal(){
+                    //这是正常的方案
+                    // switch (this.opt) {
+                    //     //注意前面一定要加上parseInt，强制转化为Int类型，否则就当做字符串进行拼接
+                    //     case '+':this.result = parseInt(this.n1)+parseInt(this.n2);break;
+                    //     case '-':this.result = parseInt(this.n1)-parseInt(this.n2);break;
+                    //     case '*':this.result = parseInt(this.n1)*parseInt(this.n2);break;
+                    //     case '/':this.result = parseInt(this.n1)/parseInt(this.n2);break;
+                    //
+                    // }
+
+                    //方案二：利用eval函数执行，两行就可以搞定，尽量少用
+                    var exeCode =  'parseInt(this.n1)'+this.opt+'parseInt(this.n2)';
+                    this.result = eval(exeCode);
+
+                },
+                cal2(){
+                    alert("hello"+this.opt)
+                }
+            }
+        })
+    </script>
+</html>

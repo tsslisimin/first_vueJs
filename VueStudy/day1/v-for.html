@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<!--这里就是mvvm中的V-->
+<body>
+<div id="app1">
+    <!--循环普通数组输出 无索引-->
+    <p v-for="item in list">{{item}}</p>
+
+
+    <!--循环普通的数组输出索引-->
+    <p v-for="(item,i) in list">值：{{item}}++索引：{{i}}</p>
+    <p>-------------------------------------------</p>
+
+    <!--循环对象数组输出 无索引输出-->
+    <p v-for="aa in list2">id:{{aa.id}}====name:{{aa.name}}</p>
+    <!--循环对象数组输出 有索引-->
+    <p v-for="(aa,bb) in list2">id:{{aa.id}}====name:{{aa.name}}====索引:{{bb}}</p>
+
+    <p>----------------------------------------------</p>
+
+    <!--循环对象  注意 对象有val和key 无索引-->
+    <p v-for="(val,key) in user">{{key}}====={{val}}</p>
+
+    <!--循环对象  注意 对象有val和key 有索引-->
+    <p v-for="(val,key,i) in user">key:{{key}}=====值：{{val}}===索引{{i}}</p>
+
+    <p>------------------------------------------------</p>
+    <!--注意 迭代数字是从1开始的-->
+    <p v-for="num in 10">{{num}}</p>
+</div>
+</body>
+
+<script>
+    // new出来的app，就是MVVM中的vm
+    var app = new Vue({
+        el:"#app1",
+        //data就是MVVM中的M
+        data:{
+            msg:"hello",
+            //定义普通数组
+            list:[1,2,3,4],
+        //    定义对象数组
+            list2:[
+                {id:1,name:'张三'},
+                {id:2,name:'李四'},
+                {id:3,name:'王五'},
+                {id:4,name:'老六'},
+            ],
+            //定义对象
+            user:{
+                id:1,
+                name:'simin',
+                sex:'nan',
+                age:27
+            }
+        }
+    })
+</script>
+</html>

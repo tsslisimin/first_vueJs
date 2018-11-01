@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<!--这里就是mvvm中的V-->
+    <body>
+        <div id="app1">
+            <p>
+                id:<input type="text" v-model="idMsg">
+                name:<input type="text" v-model="nameMsg">
+                <input type="button" value="添加" @click="add">
+            </p>
+            <!--在v-for有问题的情况下，则使用key，不使用key的话系统只会记住索引，使用UNshift增加数据时会出现bug,Key的值只能是唯一的Intengr或者String-->
+            <span v-for="item in list" :key="item.id">
+                <p><input type="checkbox">{{item.id}}   {{item.name}}</p>
+            </span>
+        </div>
+    </body>
+
+    <script>
+        // new出来的app，就是MVVM中的vm
+        var app = new Vue({
+            el:"#app1",
+            //data就是MVVM中的M
+            data:{
+                idMsg:'',
+                nameMsg:'',
+                list:[
+                    {id:1,name:'张三'},
+                    {id:2,name:'李四'},
+                    {id:3,name:'王五'},
+                    {id:4,name:'老六'},
+                    {id:5,name:'杨七'},
+                    {id:6,name:'吴八'},
+                ]
+            },
+            methods:{
+                add(){
+
+                    if(this.idMsg.length===0||this.nameMsg.length===0)return alert("不能为空");
+                    // this.list.push({id:this.idMsg,name:this.nameMsg});
+                    this.list.unshift({id:this.idMsg,name:this.nameMsg});//unshift会出现问题
+
+                }
+            }
+        })
+    </script>
+</html>

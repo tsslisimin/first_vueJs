@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:v-bind="http://www.w3.org/1999/xhtml" xmlns:v-on="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!--<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>-->
+    <style>
+        [v-cloak] {
+            display: none;
+        }
+    </style>
+</head>
+<!--这里就是mvvm中的V-->
+    <body>
+        <div id="app1">
+            <!--使用v-cloak能够解决 插值表达式闪烁的问题-->
+            <span v-cloak>{{msg}}</span>
+
+            <!--默认v-text没有闪烁问题 但是会覆盖标签里面的内容 当做普通文本输出-->
+            <div v-text="msg">====</div>
+
+            <!--v-html能够解析HTML标签语言-->
+            <div v-html="msg2"></div>
+
+            <!--v-bind是指表示绑定属性的指定，title本身是按钮的一个属性，前面增加v-bind之后就相当于使用我们自己的定义的属性，
+            “mytitle"相当于是一个变量, v-bind可以省略为 “：”-->
+            <!--v-on为事件绑定机制-->
+            <input type="button" value="anniu" title="mytitle" v-on:mousemove="show">
+            <input type="button" value="按钮" v-bind:title="mytitle+'123'" v-on:click="show" >
+
+
+        </div>
+    </body>
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script>
+        // new出来的app，就是MVVM中的vm
+        var app = new Vue({
+            el:"#app1",
+            //data就是MVVM中的M
+            data:{
+                msg:"hello",
+                msg2:"<h3>这是一个h3的标签</h3>",
+                mytitle:"这是自定义的title"
+            },
+            methods: {
+                show:function () {
+                    alert("hello");
+                }
+            }
+        })
+    </script>
+
+</html>

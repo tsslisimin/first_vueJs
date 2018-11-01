@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<!--这里就是mvvm中的V-->
+    <body>
+        <div id="app1">
+            <span>{{msg}}</span>
+            <!--v-model数据双向绑定,注意只能实现表单数据的双向绑定-->
+            <input type="text" style="width: 100%"  v-model="msg">
+            <!--v-bind无法实现数据的双向绑定-->
+            <input type="text" style="width: 100%" v-bind:value="msg">
+        </div>
+    </body>
+
+    <script>
+        // new出来的app，就是MVVM中的vm
+        var app = new Vue({
+            el:"#app1",
+            //data就是MVVM中的M
+            data:{
+                msg:"v-model测试中"
+            },
+            methods:{
+                hello(){},
+                hello2(){},
+            }
+        })
+    </script>
+</html>
