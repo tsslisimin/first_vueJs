@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Access-Control-Allow-Origin" content="*" charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Title</title>
+</head>
+
+<script src="//unpkg.com/vue/dist/vue.js"></script>
+<script src="//unpkg.com/element-ui@2.4.8/lib/index.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue-resource@1.5.1"></script>
+<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+
+<body>
+
+
+<div id="app">
+
+    姓名：<el-input v-model="inName" placeholder="请输入姓名" style="width: auto"@keyup.enter.native="addInfo"  clearable  vaule="123456"></el-input>
+    年龄：<el-input v-model="inAge" placeholder="请输入年龄" @keydown.enter.native="addInfo" style="width: auto" clearable></el-input>
+    性别：<el-input v-model="inSex" placeholder="请输入性别" @keydown.enter.native="addInfo" style="width: auto" clearable></el-input>
+    <el-button style="width: auto" @click="addInfo" >添加</el-button> &nbsp;&nbsp;
+    搜索关键字：<el-input v-model="inSearch" placeholder="请输入内容" style="width: auto" clearable @change="keySearch"></el-input>
+    <p></p>
+
+    <template>
+        <el-table :data="tableData" border style="width: auto">
+            <el-table-column prop="id" label="Id" style="width: auto">
+            </el-table-column>
+            <el-table-column prop="name" label="姓名" style="width: auto">
+            </el-table-column>
+            <el-table-column prop="age" label="年龄" style="width: auto">
+            </el-table-column>
+            <el-table-column prop="sex" label="性别" style="width: auto">
+            </el-table-column>
+            <el-table-column  label="操作"  style="width: auto">
+                <template slot-scope="scope">
+                    <el-button type="text" size="small" disabled="disabled">查看</el-button>
+                    <el-button type="text" size="small" @click="beforeUpdate(scope.row.name,scope.row.age,scope.row.sex)">编辑</el-button>
+                    <el-button type="text" size="small" @click="deleteInfo(scope.row.id)">删除</el-button>
+                </template>
+            </el-table-column>
+
+        </el-table>
+    </template>
+    <p></p>
+    <!--<el-button style="width: auto" @click="showAllInfo">get请求</el-button>-->
+
+    <!-- Form -->
+    <el-dialog title="编辑中" :visible.sync="dialogFormVisible">
+        <el-form :model="form">
+            <el-form-item label="姓名:" :label-width="formLabelWidth">
+                <el-input v-model="form.name" autocomplete="off" ></el-input>
+            </el-form-item>
+            <el-form-item label="年龄:" :label-width="formLabelWidth" >
+                <el-input v-model="form.age" autocomplete="off" disabled="disabled"></el-input>
+            </el-form-item>
+            <el-form-item label="性别:" :label-width="formLabelWidth" >
+                <el-input v-model="form.sex" autocomplete="off"></el-input>
+            </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+            <el-button @click="dialogFormVisible = false">取 消</el-button>
+            <el-button type="primary" @click="dialogFormVisible = false">保存</el-button>
+        </div>
+    </el-dialog>
+</div>
+
+
+
+
+
+
+</body>
+
+<script>
+
+
+    var temp =new Vue({
+        el:'#app',
+        data:{
+            inName:'',
+            inAge:'',
+            inSearch:'',
+            inSex:'',
+            tableData:[],
+
+
+            dialogFormVisible:false,
+            form: {
+                name: '',
+                sex: '',
+                age: '',
+                delivery: false,
+                type: [],
+                resource: '',
+                desc: ''
+            },
+            formLabelWidth: '50px',
+        },
+        created(){//当Vue创建好之后就执行show操作
+
+            this.showAllInfo()
+        },
+        methods:{
+            keySearch(){
+
+                const oldtabledata = this.tableData
+                if(this.inSearch==='')this.showAllInfo()
+                return this.tableData = oldtabledata.filter(item => {
+                    // ~item.name.indexof(this.inSearch)
+
+                    if(item.name.includes(this.inSearch)) {
+                        this.tableData = item
+                        return item
+                    }
+
+                })
+
+            },
+            showAllInfo(){
+                this.$http.get('http://127.0.0.1:8080/girl/girls').then(function (result) {
+                this.tableData = result.body
+                    // console.log(result)
+                })
+            },
+            addInfo(){
+                if(this.inName==='')return this.$message.error('姓名不能为空')
+                if(this.inAddress==='')return this.$message.error('年龄不能为空')
+                if(this.inGender==='')return this.$message.error('性别不能为空')
+                this.$http.post('http://127.0.0.1:8080/girl/girls',{age:this.inAge,name:this.inName,sex: this.inSex},{emulateJSON:true})
+                    .then(result => {
+                        this.showAllInfo()
+                    })
+                this.inName ='',this.inAge='',this.inSex=''
+            },
+            beforeUpdate(oldname,oldage,oldsex){
+                this.dialogFormVisible = true
+                this.form.name=oldname,this.form.age=oldage,this.form.sex=oldsex
+
+            },
+            updateInfo(rowId){
+                this.$http.put('http://127.0.0.1:8080/girl/girls/'+rowId,{age:11,name:11,sex: 11}).then(aa => {
+                    this.showAllInfo()
+                })
+            },
+            deleteInfo(myid){
+                console.log(myid)
+                this.$http.get('http://127.0.0.1:8080/girl/girls/del/'+myid).then(aa => {
+                    this.showAllInfo()
+                })
+            },
+
+        }
+    })
+
+</script>
+</html>
