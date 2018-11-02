@@ -125,14 +125,16 @@
                 })
             },
             addInfo(){
-                if(this.inName==='')return this.$message.error('姓名不能为空')
-                if(this.inAddress==='')return this.$message.error('年龄不能为空')
-                if(this.inGender==='')return this.$message.error('性别不能为空')
+                if(this.inName==='')return this.$message({message: '姓名不能为空',type:'error',duration:700})
+                if(this.inAge==='')return this.$message({message: '年龄不能为空',type:'error',duration:700})
+                if(this.inSex==='')return this.$message({message: '性别不能为空',type:'error',duration:700})
                 this.$http.post('http://127.0.0.1:8080/girl/girls',{age:this.inAge,name:this.inName,sex: this.inSex},{emulateJSON:true})
                     .then(result => {
                         this.showAllInfo()
+                        this.$message({message: '添加成功',type: 'success',duration:700});
                     })
                 this.inName ='',this.inAge='',this.inSex=''
+
             },
             beforeUpdate(oldname,oldage,oldsex){
                 this.dialogFormVisible = true
@@ -149,6 +151,7 @@
                 this.$http.get('http://127.0.0.1:8080/girl/girls/del/'+myid).then(aa => {
                     this.showAllInfo()
                 })
+                this.$message({message: '删除成功',type: 'success',duration:700});
             },
 
         }
