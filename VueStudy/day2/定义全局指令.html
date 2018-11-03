@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+<div id="app">
+    <p>{{msg}}</p>
+    账号：<input type="text" placeholder="请输入">
+    密码：<input type="text" placeholder="请输入" v-focus>
+
+</div>
+</body>
+
+<script>
+    Vue.directive('focus',{
+        bind:function (el) {
+
+        },
+        inserted:function (el) {
+            console.log(el)
+            el.focus();
+        },
+        update:function (el) {
+            
+        }
+    })
+    
+    var dirc = new  Vue({
+        el:'#app',
+        data:{
+            msg:'曾经，我也是一个单纯的少年，单纯的我，傻傻的问，谁是世界上最单纯的男人',
+        },
+        methods:{}
+    })
+</script>
+</html>
