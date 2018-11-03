@@ -18,9 +18,9 @@
 
     姓名：<el-input v-model="inName" placeholder="请输入姓名" style="width: auto"@keyup.enter.native="addInfo"  clearable  vaule="123456"></el-input>
     年龄：<el-input v-model="inAge" placeholder="请输入年龄" @keydown.enter.native="addInfo" style="width: auto" clearable></el-input>
-    性别：<el-input v-model="inSex" placeholder="请输入性别" @keydown.enter.native="addInfo" style="width: auto" clearable></el-input>
+    性别：<el-input v-model="inSex" placeholder="请输入性别后回车" @keydown.enter.native="addInfo" style="width: auto" clearable></el-input>
     <el-button style="width: auto" @click="addInfo" >添加</el-button> &nbsp;&nbsp;
-    搜索关键字：<el-input v-model="inSearch" placeholder="请输入内容" style="width: auto" clearable @change="keySearch"></el-input>
+    搜索关键字：<el-input v-model="inSearch" placeholder="请输入姓名" style="width: auto" clearable @keydown.enter.native="keySearch()" prefix-icon="el-icon-search"></el-input>
     <p></p>
 
     <template>
@@ -36,7 +36,7 @@
             <el-table-column  label="操作"  style="width: auto">
                 <template slot-scope="scope">
                     <el-button type="text" size="small" disabled="disabled">查看</el-button>
-                    <el-button type="text" size="small" @click="beforeUpdate(scope.row.name,scope.row.age,scope.row.sex)">编辑</el-button>
+                    <el-button type="text" size="small" @click="beforeUpdate(scope.row.name,scope.row.age,scope.row.sex,scope.row.id)">编辑</el-button>
                     <el-button type="text" size="small" @click="deleteInfo(scope.row.id)">删除</el-button>
                 </template>
             </el-table-column>
@@ -61,7 +61,7 @@
         </el-form>
         <div slot="footer" class="dialog-footer">
             <el-button @click="dialogFormVisible = false">取 消</el-button>
-            <el-button type="primary" @click="dialogFormVisible = false">保存</el-button>
+            <el-button type="primary" @click="updateInfo()">修 改</el-button>
         </div>
     </el-dialog>
 </div>
@@ -79,6 +79,7 @@
     var temp =new Vue({
         el:'#app',
         data:{
+            currID:'',
             inName:'',
             inAge:'',
             inSearch:'',
@@ -104,19 +105,10 @@
         },
         methods:{
             keySearch(){
-
-                const oldtabledata = this.tableData
-                if(this.inSearch==='')this.showAllInfo()
-                return this.tableData = oldtabledata.filter(item => {
-                    // ~item.name.indexof(this.inSearch)
-
-                    if(item.name.includes(this.inSearch)) {
-                        this.tableData = item
-                        return item
-                    }
-
+                if(this.inSearch==='')return this.showAllInfo()
+                this.$http.get('http://localhost:8080/girl/girls/findName/'+this.inSearch).then(function (Sroucedata) {
+                    this.tableData = Sroucedata.body
                 })
-
             },
             showAllInfo(){
                 this.$http.get('http://127.0.0.1:8080/girl/girls').then(function (result) {
@@ -125,33 +117,41 @@
                 })
             },
             addInfo(){
-                if(this.inName==='')return this.$message({message: '姓名不能为空',type:'error',duration:700})
-                if(this.inAge==='')return this.$message({message: '年龄不能为空',type:'error',duration:700})
-                if(this.inSex==='')return this.$message({message: '性别不能为空',type:'error',duration:700})
+                if(this.inName==='')return this.$message({message: '姓名不能为空',type:'error',duration:1000})
+                if(this.inAge==='')return this.$message({message: '年龄不能为空',type:'error',duration:1000})
+                if(this.inSex==='')return this.$message({message: '性别不能为空',type:'error',duration:1000})
                 this.$http.post('http://127.0.0.1:8080/girl/girls',{age:this.inAge,name:this.inName,sex: this.inSex},{emulateJSON:true})
                     .then(result => {
                         this.showAllInfo()
-                        this.$message({message: '添加成功',type: 'success',duration:700});
+                        this.$message({message: '添加成功',type: 'success',duration:1000});
                     })
                 this.inName ='',this.inAge='',this.inSex=''
 
             },
-            beforeUpdate(oldname,oldage,oldsex){
+            beforeUpdate(oldname,oldage,oldsex,myid){//点击编辑之后，出现个人可编辑信息
                 this.dialogFormVisible = true
                 this.form.name=oldname,this.form.age=oldage,this.form.sex=oldsex
+                this.currID=myid
 
             },
-            updateInfo(rowId){
-                this.$http.put('http://127.0.0.1:8080/girl/girls/'+rowId,{age:11,name:11,sex: 11}).then(aa => {
+            //post请求一定注意加{emulateJSON:true}
+            updateInfo(){
+                // console.log(this.currID) 获取当前beforeUpdata的ID
+                this.$http.post('http://127.0.0.1:8080/girl/girls/update/'+this.currID,{age:this.form.age,name:this.form.name,sex: this.form.sex},{emulateJSON:true}).then(aa => {
+                    this.dialogFormVisible = false
                     this.showAllInfo()
+                    return this.$message({message: '修改成功',type: 'success',duration:1000});
                 })
+                return this.$message({message: '修改失败',type: 'error',duration:1000});
             },
             deleteInfo(myid){
                 console.log(myid)
                 this.$http.get('http://127.0.0.1:8080/girl/girls/del/'+myid).then(aa => {
                     this.showAllInfo()
+                    return this.$message({message: '删除成功',type: 'success',duration:1000});
                 })
-                this.$message({message: '删除成功',type: 'success',duration:700});
+                return this.$message({message: '删除失败',type:'error',duration:1000})
+
             },
 
         }
