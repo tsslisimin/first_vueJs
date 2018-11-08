@@ -11,8 +11,8 @@
 
     <div id="app1">
 
-        <router-link to="/login/id=3&name=lisimin">登录</router-link>
-        <router-link to="/register">注册</router-link>
+        <router-link to="/login?id=3&name=lisimin">登录</router-link>
+        <router-link to="/register/21/tss">注册</router-link>
         <router-view></router-view>
     </div>
 
@@ -23,17 +23,20 @@
 <script>
 
     var login={
-        template:'<h1>登录</h1>'
+        //第一种方式
+        template:'<h1>登录---{{$route.query.id}}---{{$route.query.name}}</h1>'
     }
 
     var register={
-        template:'<h1>注册</h1>'
+        //第二种方式
+        template:'<h1>注册---{{$route.params.id}}---{{$route.params.name}}</h1>'
     }
 
-    var routerObj = new VueRouter({
+    var router = new VueRouter({
     routes:[
+        {path:'/',redirect:'/login'},
         {path:'/login',component:login},
-        {path:'/register',component:register},
+        {path:'/register/:id/:name',component:register},
 
     ],
     })
@@ -41,7 +44,7 @@
         el:"#app1",
         data:{},
         methods:{},
-        router:routerObj
+        router
     })
 </script>
 </html>

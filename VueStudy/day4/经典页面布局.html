@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+</head>
+<style>
+    h1{
+     margin: 0;
+        padding: 0;
+    }
+    .contains{
+        display: flex;
+        height: 800px;
+    }
+    .header{
+        background: #6fff4b;
+        height:60px;
+    }
+    .main{
+        background: #B3C0D1;
+        flex: 8;
+
+    }
+    .left{
+        background: red;
+      flex: 2;
+
+    }
+</style>
+<body>
+
+    <div id="app1">
+
+
+        <router-view></router-view>
+        <div class="contains">
+
+            <router-view name="myleft"></router-view>
+            <router-view name="mymain"></router-view>
+        </div>
+
+    </div>
+
+
+</body>
+
+
+
+<script>
+
+    var header = {
+        template:'<h1 class="header">这是header</h1>'
+    }
+
+    var left={
+        template:'<h1 class="left">这是left</h1>'
+    }
+
+    var main={
+        template:'<h1 class="main">这是main</h1>'
+    }
+
+    var router =new VueRouter({
+        routes:[//注意是routes
+            {
+                path: '/',
+                components: {'default':header,'mymain':main,'myleft':left}//注意是components
+
+            }
+        ]
+    })
+
+    var app = new Vue({
+        el:"#app1",
+        data:{},
+        methods:{},
+        //相当于 router:router
+        router
+    })
+</script>
+</html>
