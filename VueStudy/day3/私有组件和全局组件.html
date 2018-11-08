@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<!--这里就是mvvm中的V-->
+    <body>
+        <div id="app1">
+
+            <out_login></out_login>
+            <in_login></in_login>
+        </div>
+
+
+
+        <template id="out_login">
+            <div>
+                <p>{{out_msg}}</p>
+            </div>
+        </template>
+
+        <template id="in_login">
+            <div>
+                <h2>{{this.in_msg}}</h2>
+            </div>
+        </template>
+
+    </body>
+
+
+    <script>
+        Vue.component('out_login',{
+            template:'#out_login',
+            //注意：组件data是一个函数，返回值是一个对象
+            data:function () {
+                return {
+                        out_msg:'out_msg'
+                    }
+                }
+
+            ,methods: {
+                onSubmit(){
+                    console.log('submit!')
+                }
+            }
+        })
+
+        // new出来的app，就是MVVM中的vm
+        var app = new Vue({
+            el:"#app1",
+            //data就是MVVM中的M
+            data:{
+                in_msg:'in_msg'
+            },
+            methods:{
+
+            },
+            components:{
+                in_login:{
+                    template: '#in_login'
+                }
+            }
+        })
+    </script>
+</html>

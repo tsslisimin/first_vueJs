@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="//unpkg.com/element-ui@2.4.8/lib/index.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+</head>
+
+<body>
+
+<div id="app">
+
+    <h1 ref="h1">h1的内部文本信息</h1>
+    <button  @click="fatheroutputmsg">点我（父组件）</button>
+
+    <com1 ref="son"></com1>
+
+</div>
+
+<template id="com1">
+    <div>
+        <button  @click="outputmsg">点我（子组件）</button>
+    </div>
+</template>
+
+</body>
+
+
+
+<script>
+
+    var com1 =  {
+        template:"#com1",
+        data(){
+            return{
+                sonmsg:'this is son'
+            }
+        },
+        methods: {
+            sonmsgfunc(data){
+                alert('this is son function'+data)
+
+            },
+            outputmsg(){
+                console.log(this.$refs.h1.innerText)
+            }
+        },
+        props: ['far_id']
+    }
+
+
+    var temp = new Vue({
+        el:'#app',
+        data:{
+            fathermsg:'this is father'
+        },
+        methods:{
+            fathermsgfunc(){
+                alert('this is father function')
+            },
+            fatheroutputmsg(){
+                console.log(this.$refs.h1.innerText)
+                //通过ref属性 父调用子的值和方法  子不能通过ref属性使访问父的值和方法
+                console.log(this.$refs.son.sonmsg)
+                console.log(this.$refs.son.sonmsgfunc(this.fathermsg))
+            },
+        },
+        components:{
+            com1
+        }
+    })
+</script>
+</html>

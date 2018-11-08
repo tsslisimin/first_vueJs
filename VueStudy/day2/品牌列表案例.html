@@ -81,9 +81,8 @@
                 if(this.inAge==='')return this.$message.error('年龄不能为空')
                 if(this.inGender==='')return this.$message.error('性别不能为空')
                 // console.log(this.inName+'-----'+this.inAddress)
-                // this.tableData.unshift({userId:this.tableData.length+1,date:new Date().toString(),name:this.inName,address:this.inAddress})
                 // console.log(this.tableData.length)
-                this.tableData.push({id:this.tableData.length+1,age:this.inAge,name:this.inName,gender:this.inGender})
+                this.tableData.unshift({id:this.tableData.length+1,age:this.inAge,name:this.inName,gender:this.inGender})
                 this.inName='',this.inAge=''
             },
             keySearch(){

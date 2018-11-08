@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<!--这里就是mvvm中的V-->
+<body>
+<div id="app1">
+    <span>{{parent_msg}}</span>
+
+    <mylogin :aa="parent_msg"></mylogin>
+</div>
+
+
+</body>
+
+
+<!--//这个类似于C语言中的值传递-->
+<script>
+
+    var mylogin = {
+        template:'<h1 @click="togglemsg">{{sonmsg}}-现在想使用父组件的值：--{{aa}}</h1>',
+        data:function () {
+            return{
+                sonmsg:'这个是子组件的值'
+            }
+        },
+        methods:{
+
+            togglemsg(){this.aa='修改了父组件的值'}
+        },
+        props:['aa'],
+    }
+    // new出来的app，就是MVVM中的vm
+
+    var app = new Vue({
+        el:"#app1",
+        //data就是MVVM中的M
+        data:{
+            parent_msg:"这个是父组件的值",
+        },
+        methods:{
+            ttogglemsg(sonmsg){alert('调用了父组件的方法'+sonmsg)}
+        },
+        components:{
+            mylogin
+        },
+    })
+</script>
+</html>

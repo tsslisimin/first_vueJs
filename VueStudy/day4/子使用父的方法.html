@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<!--这里就是mvvm中的V-->
+<body>
+<div id="app1">
+    <span>{{parent_msg}}</span>
+
+    <mylogin @aa="parent_fun"></mylogin>
+</div>
+
+
+</body>
+
+
+
+<script>
+
+    var mylogin = {
+        template:'<div><h1 @click="togglemsg">{{sonmsg}}-点击我调用父组件的方法</h1></div>',
+        data:function () {
+            return{
+                sonmsg:'这个是子组件的值'
+            }
+        },
+        methods:{
+            togglemsg(){this.$emit('aa')}
+        },
+
+    }
+    // new出来的app，就是MVVM中的vm
+    var app = new Vue({
+        el:"#app1",
+        //data就是MVVM中的M
+        data:{
+            parent_msg:"这个是父组件的值",
+        },
+        methods:{
+             parent_fun(){
+                 alert('调用了父组件的方法')
+             }
+        },
+        components:{
+            mylogin
+        },
+    })
+</script>
+</html>

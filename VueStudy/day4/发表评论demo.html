@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="//unpkg.com/element-ui@2.4.8/lib/index.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+</head>
+
+<body>
+    <div id="app">
+        <com1 @myfunc="addcommit" :far_id="list.length"></com1>
+        <ul class="list-group"v-for="item in list" :key="item.id">
+            <li class="list-group-item">
+                <span class="badge">评论人：{{item.name}}</span>
+                {{item.content}}
+                <span class="badge">发表时间：{{item.id}}</span>
+            </li>
+
+        </ul>
+    </div>
+
+
+<template id="com1">
+    <div>
+        评论内容：
+            <el-input
+                    type="textarea"
+                    :rows="3"
+                    placeholder="请输入发表内容"
+                    v-model="textarea">
+            </el-input>
+
+        <p>评论人：</p>
+        <el-input v-model="inName" placeholder="请输入姓名"  clearable ></el-input>
+        <p><el-button type="primary" @click="commitmsg">发表评论</el-button></p>
+    </div>
+</template>
+
+</body>
+
+
+
+<script>
+
+    var com1 =  {
+        template:"#com1",
+        data(){
+            return{
+                textarea:'',
+                inName:''
+            }
+        },
+        methods: {
+            commitmsg(){
+                console.log(this.far_id)
+                var sondata={id:this.far_id+1,name:this.inName,content:this.textarea}
+                this.$emit('myfunc',sondata)
+                console.log('子组件'+sondata)
+
+            }
+        },
+        props: ['far_id']
+    }
+
+
+    var temp = new Vue({
+        el:'#app',
+        data:{
+            list:[
+                {id:1,name:'李白',content:'劝君更尽一杯酒'},
+                {id:2,name:'嬴政',content:'奋斗欧文国家法律的'},
+                {id:3,name:'吕布',content:'是时候展现真正的技术了'},
+                ],
+        },
+        methods:{
+            addcommit(mydata){
+                this.list.unshift(mydata)
+            }
+        },
+        components:{
+            com1,
+        }
+    })
+</script>
+</html>
